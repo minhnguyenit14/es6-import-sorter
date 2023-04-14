@@ -1,0 +1,30 @@
+{
+  "sourcePrefixes": ["@", "\\w+", "\\."],
+  "sectionPrefix": "// ",
+  "sectionNames": [
+    "packages",
+    "types",
+    "classes",
+    "configs",
+    "contexts",
+    "stores",
+    "helpers",
+    "hooks",
+    "networks",
+    "navigation",
+    "constants",
+    "components",
+    "styles",
+    "images",
+    "others"
+  ],
+  "startImportBlockSign": "",
+  "endImportBlockSign": "",
+  "statementTerminator": ";",
+  "preCommands": [
+    {
+      "command": "editor.action.formatDocument",
+      "system": "vscode"
+    }
+  ]
+}

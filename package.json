@@ -1,0 +1,73 @@
+{
+  "name": "es6-import-sorter",
+  "displayName": "ES6 Import Sorter",
+  "description": "Sort your imports neatly (with customized configs)",
+  "version": "0.1.0",
+  "publisher": "minhnguyenit14",
+  "author": "minhnguyenit14",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/minhnguyenit14/es6-import-sorter.git"
+  },
+  "engines": {
+    "vscode": "^1.77.0"
+  },
+  "categories": [
+    "Formatters"
+  ],
+  "keywords": [
+    "import formatter",
+    "import sorter",
+    "sort import",
+    "js import",
+    "ts import",
+    "es6 import"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "icon": "assets/icon.png",
+  "contributes": {
+    "commands": [
+      {
+        "command": "es6-import-sorter.sort",
+        "title": "ES6 Import Sorter: Sort",
+        "when": "editorTextFocus && !editorReadonly"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "es6-import-sorter.sort",
+        "key": "shift+alt+s",
+        "mac": "shift+alt+s",
+        "when": "editorTextFocus && !editorReadonly"
+      }
+    ],
+    "jsonValidation": [
+      {
+        "fileMatch": ".es6importsorterrc.json",
+        "url": "https://json.schemastore.org/es6importsorterrc.json"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.77.0",
+    "@types/glob": "^8.1.0",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "16.x",
+    "@typescript-eslint/eslint-plugin": "^5.56.0",
+    "@typescript-eslint/parser": "^5.56.0",
+    "eslint": "^8.36.0",
+    "glob": "^8.1.0",
+    "mocha": "^10.2.0",
+    "typescript": "^4.9.5",
+    "@vscode/test-electron": "^2.3.0"
+  }
+}
