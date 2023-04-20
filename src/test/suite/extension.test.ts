@@ -41,6 +41,7 @@ suite('-- formatImportSections Testing', () => {
       done();
     });
 
+    testData(input, undefined, expected);
     testData(input, config, expected);
   });
 
@@ -64,6 +65,7 @@ suite('-- formatImportSections Testing', () => {
       done();
     });
 
+    testData(input, undefined, expected);
     testData(input, config, expected);
   });
 
@@ -87,6 +89,31 @@ suite('-- formatImportSections Testing', () => {
       done();
     });
 
+    testData(input, undefined, expected);
+    testData(input, config, expected);
+  });
+
+  test('with-content-below-with-no-separator', () => {
+    let input = '',
+      config = {},
+      expected: any = {};
+
+    before(async function getTestData(done) {
+      const { input: inputData } = await import(
+        './test-data/format-import-sections/with-content-below-with-no-separator/input'
+      );
+      input = inputData.text;
+      config = inputData.config;
+
+      const { expected: expectedData } = await import(
+        './test-data/format-import-sections/with-content-below-with-no-separator/expected'
+      );
+      expected = expectedData;
+
+      done();
+    });
+
+    testData(input, undefined, expected);
     testData(input, config, expected);
   });
 });

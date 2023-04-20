@@ -3,13 +3,77 @@
 Your imports will be sorted neatly, and organized by sections (with customizable configs).
 
 > - Support ES6 `import` syntax only.
-> - This extension only sorts the imports, doesn't do formatting, so you should format your file before using the tool (ex: using [`Prettier`][prettier]).
+> - This extension only sorts the imports and doesn't do the formatting, so you should format your file before using the tool (ex: using [`Prettier`][prettier]).
 
 
 ## Demo
 
 ![demo-feature](./assets/demo-feature.gif)
 <br/>
+
+
+Before sorting:
+
+```js
+import React from 'react';
+import {View} from 'react-native';
+// @components
+import SuperMarket from './1-level-import';
+import Store from './1-level-import';
+import {
+    Food,
+    Drink
+} from '@components';
+import Warehouse from '../../2-level-import';
+// @constants
+import {CURRENCY} from '@constants';
+// @configs
+import './configuration';
+import saleConfig from 'data-central';
+import '..';
+import '.';
+import {appConfig} from '@app/app.config';
+import {
+  moduleConfig,
+  module1Config,
+  module2Config,
+  module3Config,
+  module4Config,
+} from '../module-config';
+
+const ProductList = (props) => {
+...
+```
+
+After sorting:
+
+```js
+import React from 'react';
+import {View} from 'react-native';
+// @configs
+import {appConfig} from '@app/app.config';
+import saleConfig from 'data-central';
+import '.';
+import './configuration';
+import '..';
+import {
+  moduleConfig,
+  module1Config,
+  module2Config,
+  module3Config,
+  module4Config,
+} from '../module-config';
+// @constants
+import {CURRENCY} from '@constants';
+// @components
+import {Food, Drink} from '@components';
+import Store from './1-level-import';
+import SuperMarket from './1-level-import';
+import Warehouse from '../../2-level-import';
+
+const ProductList = (props) => {
+...
+```
 
 ## Table of Contents
 
@@ -22,7 +86,7 @@ Your imports will be sorted neatly, and organized by sections (with customizable
 
 ## Usage
 
-> Highly recommend you should format the file content first (manually or automatically by config [`preCommands`](#precommands) prop)<br/>
+> Highly recommend you should format your code first (manually or automatically by configuring [`preCommands`](#precommands) prop)
 
 Using Command Palette
 
@@ -37,29 +101,15 @@ Using Keyboard shortcut
 Press Cmd/Ctrl + alt + S (MacOS/Window)
 ```
 
-
-
 ## Story
 
-I want the imports to be organized followed by some rules. For example, it needs to be sorted by section priority as predefined, by source path group priority, and by string length in each section.<br/><br/>
-But sometimes, I or my team members forget the priority, or it takes time to sort the imports by source path group, string length, etc. then it leads to a mess.<br/><br/>
+I want the imports to be organized and followed some rules. For example, it needs to be sorted by section priority as predefined, by source path group priority, and by string length in each section.<br/><br/>
+But sometimes, I or my team members forget the priority, or it takes time to sort the imports by source path group, string length, etc. then which leads to a mess.<br/><br/>
 So, I created this extension to clear the problems.<br/>
-
-Before sorting:
-
-```js
-
-```
-
-After sorting:
-
-```js
-
-```
 
 ## Anatomy
 
-The main idea of this extension is to divide the whole imports into sections, sort statements inside each section, then rearrange each section by defined configs. Here is the structure of this:
+The main idea of this extension is to divide the whole imports into sections, sort statements inside each section, then rearrange each section by defined configs.
 
 You can mark a sortable area by using `startImportSign` and `endImportSign`.
 
@@ -77,11 +127,10 @@ You can mark a sortable area by using `startImportSign` and `endImportSign`.
 > For example:
 >
 > ```js
-> import {
->   //|
->   View, //|
->   Text, //|
-> } from 'react-native'; //| --> `} from 'react-native';` is the max display import statement, that having 22 chars.
+> import {  // 8 chars
+>   View,   // 7 chars
+>   Text,   // 7 chars
+> } from 'react-native'; // 2 chats --> `} from 'react-native';` is the max length of this import statement.
 > ```
 
 ## Configs
@@ -137,7 +186,9 @@ const ProductList = React.FC<ProductListProps> props => {
 
 #### `sectionPrefix`
 
-Define your prefix of sections. Every line of code, inside the sortable area, if starting with the prefix will be treated as a new section for dividing.
+Define your prefix of sections. Every line of code, inside the sortable area, if starting with this prefix will be treated as a new section for dividing.
+
+> NOTE: If you don't define this config then every line inside the sortable area will be sorted. If you do, every line inside non-titled sections will be ignored.
 
 #### `sectionNames`
 
