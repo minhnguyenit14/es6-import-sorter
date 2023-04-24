@@ -63,7 +63,9 @@ export function formatImportSections(
     if (isNewSection) {
       sectionKey = line;
     } else {
-      sectionValue += line + (index < lines.length - 1 ? '\n' : nextLine !== undefined ? '' : '\n');
+      sectionValue +=
+        line +
+        (index < lines.length - 1 ? '\n' : nextLine !== undefined ? '' : '\n');
     }
 
     if (isEndSection) {
@@ -166,7 +168,7 @@ export function formatImportBySourcePath(
   const separator = statementTerminator + '\n';
 
   if (sourcePrefixes?.length) {
-    statements = getStatementGroupsBySign(
+    statements = getStatementGroupListBySign(
       importStatements,
       statementTerminator,
       sourcePrefixes,
@@ -203,7 +205,7 @@ export function formatImportBySourcePath(
   return statements.map((stm) => stm.value);
 }
 
-export function getStatementGroupsBySign(
+export function getStatementGroupListBySign(
   importStatements: string[],
   statementTerminator: string,
   sourcePrefixes: string[],
@@ -227,7 +229,10 @@ export function getStatementGroupsBySign(
   }
 
   sourcePrefixes.forEach((sign, index) => {
-    const statementGroup = getStatementGroupBySign(importStatements, sign);
+    const statementGroup = getSortedStatementGroupBySign(
+      importStatements,
+      sign,
+    );
 
     if (sign === '\\.') {
       const dotGroups: {
@@ -290,15 +295,66 @@ export function getStatementGroupsBySign(
   return statements;
 }
 
-export function getStatementGroupBySign(
+export function getSortedStatementGroupBySign(
   importStatements: string[],
   sign: string,
 ) {
-  return importStatements.filter((statement) => {
-    const sourcePath = getSourcePathWithoutQuote(statement);
+  return importStatements
+    .filter((statement) => {
+      const sourcePath = getSourcePathWithoutQuote(statement);
 
-    return isSourcePathStartsWithPrefix(sign, sourcePath);
-  });
+      return isSourcePathStartsWithPrefix(sign, sourcePath);
+    })
+    .map((stm) => sortComponentsInsideStatement(stm));
+}
+
+export function sortComponentsInsideStatement(statement: string) {
+  const isImportStatement = statement
+    .replace(/\n/gm, '')
+    .match(/^import .+ from .+/gm);
+
+  if (!isImportStatement) {
+    return statement;
+  }
+
+  let components = statement.split('\n');
+  let importStart = [''],
+    importEnd = [''];
+
+  if (components.length > 1) {
+    importStart = components.splice(
+      components.findIndex((value) => value.includes('import {')),
+      1,
+    );
+    importEnd = components.splice(
+      components.findIndex((value) => value.includes('} from')),
+      1,
+    );
+
+    components.sort((prev, next) => prev.length - next.length);
+
+    statement = importStart.concat(components).concat(importEnd).join('\n');
+  } else {
+    const startBlockSign = '{';
+    const endBlockSign = '}';
+    const importIndex = statement.indexOf(startBlockSign);
+    const fromIndex = statement.indexOf(endBlockSign);
+    importStart = [statement.substring(0, importIndex + startBlockSign.length)];
+    importEnd = [statement.substring(fromIndex)];
+    components = statement
+      .substring(importIndex + startBlockSign.length, fromIndex)
+      .split(',');
+
+    components = components
+      .sort((prev, next) => prev.length - next.length)
+      .map(
+        (value, index) => value.trim() + (index !== components.length - 1 ? ', ' : ''),
+      );
+
+    statement = importStart.concat(components).concat(importEnd).join('');
+  }
+
+  return statement;
 }
 
 export function getMaxLengthOfAbsoluteSourcePath(importStatement: string) {

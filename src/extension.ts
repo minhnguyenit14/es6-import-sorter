@@ -92,9 +92,7 @@ async function getConfigs() {
         vscode.workspace.fs.readFile(rootPath).then(
           (data) => {
             const rawConfig = new TextDecoder().decode(data);
-            if (!!rawConfig) {
-              resolve(JSON.parse(rawConfig));
-            }
+            resolve(rawConfig ? JSON.parse(rawConfig) : {});
           },
           (error) => {
             console.log('error_read_config_file', error);

@@ -23,6 +23,7 @@
     "ts import",
     "es6 import"
   ],
+  "license": "MIT",
   "activationEvents": [],
   "main": "./out/extension.js",
   "icon": "assets/icon.png",

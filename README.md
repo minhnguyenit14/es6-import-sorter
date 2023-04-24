@@ -118,19 +118,21 @@ You can mark a sortable area by using `startImportSign` and `endImportSign`.
     ex: `// @configs`.<br/>
     If you consider `// @` as a `sectionPrefix` then `configs` is a `sectionName`<br/>
   - **Import statement**<br/>
-    ex: `import smth from '@app'`<br/>
+    ex: `import smth, {component1, component2} from '@app'`<br/>
     You may want to consider `@` as a `sourcePathPrefix` to group everything like that together.<br/>
-    That's means, you can group your imports before sorting by statement length.
+    -> That's means, you can group your imports before sorting by statement length.
 - **End point** (match with `endImportSign`).
 
 > The default behavior of sorting inside a section is by `max display import statement length` (not the raw text length).<br/>
 > For example:
 >
 > ```js
-> import {  // 8 chars
->   View,   // 7 chars
->   Text,   // 7 chars
-> } from 'react-native'; // 2 chats --> `} from 'react-native';` is the max length of this import statement.
+> import {
+>   // components inside an import statement will be sorted by length also.
+>   View, 
+>   SomeComponentWithLongName,  
+> } from 'react-native';        
+> // the length of `} from 'react-native';` is the max length of this import statement.
 > ```
 
 ## Configs
@@ -148,8 +150,8 @@ import {View} from 'react-native';              // --> end non-titled section
 import SuperMarket from './1-level-import';
 import Store from './1-level-import';
 import {
-    Food,
     Drink
+    Food,
 } from '@components';
 import Warehouse from '../../2-level-import';   // --> end titled section
 // @constants
@@ -329,7 +331,7 @@ Otherwise, the sortable area will start from the next line.
 
 - Default: `;`
 
-Define the terminator for the import statement.
+Define the terminator for an import statement.
 
 #### `preCommands`
 
@@ -355,13 +357,13 @@ This is useful for the case that you want to do something else first (ex: format
 <br/>
 
 - You can get the command ID of the VSCode by following:
-    - Press `Cmd+Shift+P`/`Ctrl+Shift+P`, then search for the command you want. Then press the `settings` icon on that command.
+    - Press `Cmd/Ctrl+Shift+P` (MacOS/Window), then search for the command you want. Then press the ⚙️ icon on that command.
     <br/>
     <br/>
     ![VSCode Extension Command](./assets/vscode-search-command.png)
     <br/>
     <br/>
-    - Copy the text after `@Command:`
+    - Copy the text after `@command:`
     <br/>
     <br/>
     ![VSCode Extension Command](./assets/vscode-get-command.png)
