@@ -45,7 +45,7 @@ const ProductList = (props) => {
 ...
 ```
 
-After sorting:
+After sorting (use [`Prettier`][prettier] first):
 
 ```js
 import React from 'react';
@@ -190,7 +190,7 @@ const ProductList = React.FC<ProductListProps> props => {
 
 Define your prefix of sections. Every line of code, inside the sortable area, if starting with this prefix will be treated as a new section for dividing.
 
-> NOTE: If you don't define this config then every line inside the sortable area will be sorted. If you do, every line inside non-titled sections will be ignored.
+> NOTE: If you don't define this config then every line inside the sortable area will be sorted. If you do, only the titled section will be sorted and rearranged, every line inside non-titled sections will be ignored.
 
 #### `sectionNames`
 
@@ -311,9 +311,9 @@ import {moduleConfig} from '../module-config';
 
 Define the start point of the sortable area.
 
-If this prop is undefined or empty, the start index of the file will be treated as the start point.
+If this prop is undefined or empty, the first line starts with `import` is the start point.
 
-Otherwise, the sortable area will start from the next line.
+Otherwise, the sortable area will start from the next line, right after the line matches with this prop.
 
 > This prop is compared strictly by '===' operator.
 

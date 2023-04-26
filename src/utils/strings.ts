@@ -21,12 +21,14 @@ export function formatImportSections(
   let sectionKey: string = '';
   let sectionValue: string = '';
   let firstLineIndex = lines.findIndex((line) =>
-    line.trim().startsWith(startImportBlockSign),
+    startImportBlockSign
+      ? line.trim() === startImportBlockSign
+      : line.trim().startsWith('import'),
   );
   if (firstLineIndex < 0) {
     firstLineIndex = 0;
   } else if (firstLineIndex > 0) {
-    firstLineIndex++;
+    firstLineIndex = startImportBlockSign ? firstLineIndex + 1 : firstLineIndex;
   }
 
   let firstCharacterIndex = 0;
@@ -348,7 +350,8 @@ export function sortComponentsInsideStatement(statement: string) {
     components = components
       .sort((prev, next) => prev.length - next.length)
       .map(
-        (value, index) => value.trim() + (index !== components.length - 1 ? ', ' : ''),
+        (value, index) =>
+          value.trim() + (index !== components.length - 1 ? ', ' : ''),
       );
 
     statement = importStart.concat(components).concat(importEnd).join('');
