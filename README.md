@@ -3,7 +3,7 @@
 Your imports will be sorted neatly, and organized by sections (with customizable configs).
 
 > - Support ES6 `import` syntax only.
-> - This extension only sorts the imports and doesn't do the formatting, so you should format your file before using the tool (ex: using [`Prettier`][prettier]).
+> - This extension sorts the imports only and doesn't do the formatting, so you should format your file before using the tool (ex: using [`Prettier`][prettier]).
 
 
 ## Demo

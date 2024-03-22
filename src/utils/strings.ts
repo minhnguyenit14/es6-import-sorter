@@ -311,21 +311,30 @@ export function getSortedStatementGroupBySign(
 }
 
 export function sortComponentsInsideStatement(statement: string) {
+  let components = statement.split('\n');
+  let groupTitle = '';
+
+  // split group title out of statement
+  if (!!components[0].match(/^\/\/.*/i)) {
+    groupTitle = components[0];
+    components.splice(1);
+    statement = statement.slice(groupTitle.length);
+  }
+
   const isImportStatement = statement
     .replace(/\n/gm, '')
-    .match(/^import .+ from .+/gm);
+    .match(/^import.*{.*/i);
 
   if (!isImportStatement) {
     return statement;
   }
 
-  let components = statement.split('\n');
   let importStart = [''],
     importEnd = [''];
 
   if (components.length > 1) {
     importStart = components.splice(
-      components.findIndex((value) => value.includes('import {')),
+      components.findIndex((value) => !!value.match(/.*import.*{.*/i)),
       1,
     );
     importEnd = components.splice(
@@ -349,15 +358,17 @@ export function sortComponentsInsideStatement(statement: string) {
 
     components = components
       .sort((prev, next) => prev.length - next.length)
-      .map(
-        (value, index) =>
-          value.trim() + (index !== components.length - 1 ? ', ' : ''),
-      );
+      .map((value, index) => {
+        return (
+          value.trim() +
+          (value.trim() ? (index !== components.length - 1 ? ', ' : '') : '')
+        );
+      });
 
     statement = importStart.concat(components).concat(importEnd).join('');
   }
 
-  return statement;
+  return groupTitle + statement;
 }
 
 export function getMaxLengthOfAbsoluteSourcePath(importStatement: string) {
